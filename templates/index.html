@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Eventos</title>
+
+    <!-- Vinculación del CSS personalizado y de DataTables -->
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dataTables.dataTables.min.css') }}">
+</head>
+<body>
+    <h1>Registro de Eventos</h1>
+
+    <!-- Formulario de registro de eventos -->
+    <form id="eventForm">
+        <label for="event">Nombre del evento:</label>
+        <input type="text" id="event" name="event" required>
+
+        <label for="date">Fecha:</label>
+        <input type="date" id="date" name="date" required>
+
+        <label for="time">Hora:</label>
+        <input type="time" id="time" name="time" required>
+
+        <button type="submit">Registrar Evento</button>
+    </form>
+
+    <h2>Eventos Registrados</h2>
+    <!-- Tabla con la clase display que usará DataTables -->
+    <button id="downloadBtn" class="btn btn-primary">Descargar Datos en JSON</button>
+
+     <div>
+        <table id="eventTable" >
+            <thead>
+                <tr>
+                    <th>Evento</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Los eventos aparecerán aquí -->
+            </tbody>
+        </table>
+    </div>
+   
+
+    <!-- Scripts para jQuery, DataTables y el archivo de la lógica personalizada -->
+    <script src="{{ url_for('static', filename='jquery-3.7.1.js') }}"></script>
+
+
+    <script src="{{ url_for('static', filename='dataTables.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+
+    <!-- Inicializar DataTables -->
+
+</body>
+</html>
