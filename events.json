@@ -1,14 +1,2 @@
 [
-    {
-        "event": "ejemplo",
-        "date": "2024-10-10",
-        "time": "11:05",
-        "registered_at": "2024-10-02 11:03:32"
-    },
-    {
-        "event": "ejemplo 1",
-        "date": "2024-10-02",
-        "time": "11:10",
-        "registered_at": "2024-10-02 11:06:05"
-    }
 ]
