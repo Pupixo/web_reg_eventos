@@ -15,16 +15,33 @@
 
     <!-- Formulario de registro de eventos -->
     <form id="eventForm">
-        <label for="event">Nombre del evento:</label>
-        <input type="text" id="event" name="event" required>
+        <div class="form-group">
+            <label for="event">Nombre del evento:</label>
+            <input type="text" id="event" name="event" placeholder="Ingrese el nombre del evento" required>
+        </div>
 
-        <label for="date">Fecha:</label>
-        <input type="date" id="date" name="date" required>
+        <div class="form-group">
+            <label for="date">Fecha:</label>
+            <input type="date" id="date" name="date" required>
+        </div>
 
-        <label for="time">Hora:</label>
-        <input type="time" id="time" name="time" required>
+        <div class="form-group">
+            <label for="time">Hora:</label>
+            <input type="time" id="time" name="time" required>
+        </div>
 
-        <button type="submit">Registrar Evento</button>
+        <div class="form-group">
+            <label for="state">Estado:</label>
+            <select id="state" name="state" required>
+                <option value="" disabled selected>Seleccione el estado</option>
+                <option value="Pendiente">Pendiente</option>
+                <option value="Completado">Completado</option>
+                <option value="Cancelado">Cancelado</option>
+            </select>
+        </div>
+
+        <button type="submit" id="boton_accion">Registrar Evento</button>
+        <button type="button" class="boton_limpiar" >Limpiar</button>
     </form>
 
     <h2>Eventos Registrados</h2>
@@ -38,6 +55,9 @@
                     <th>Evento</th>
                     <th>Fecha</th>
                     <th>Hora</th>
+                    <th>Estado</th>
+                    <th>Editar</th>
+                    <th>Eliminar</th>
                 </tr>
             </thead>
             <tbody>

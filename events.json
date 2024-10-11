@@ -1,2 +1,23 @@
 [
+    {
+        "event": "fdgdg",
+        "date": "2024-10-10",
+        "time": "13:59",
+        "state": "Pendiente",
+        "registered_at": "2024-10-11 13:56:06"
+    },
+    {
+        "event": "fdgdg",
+        "date": "2024-10-31",
+        "time": "13:59",
+        "state": "Completado",
+        "registered_at": "2024-10-11 16:12:49"
+    },
+    {
+        "event": "NOMBRE EDITADO",
+        "date": "2024-10-31",
+        "time": "13:59",
+        "state": "Completado",
+        "registered_at": "2024-10-11 16:12:59"
+    }
 ]
