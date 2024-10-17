@@ -8,73 +8,80 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     return render_template('index.html')
-
-# Ruta para registrar eventos
-# @app.route('/api/register_event', methods=['POST'])
-# def register_event():
-#     data = request.get_json()
-#     print("data.........",data)
-#     event_name = data.get('event')
-#     event_date = data.get('date')
-#     event_time = data.get('time')
     
-#     if event_name and event_date and event_time:
-#         # Cargar eventos anteriores
-#         try:
-#             with open('events.json', 'r') as file:
-#                 events = json.load(file)
-#         except (FileNotFoundError, json.JSONDecodeError):
-#             events = []
-        
-#         # Agregar el nuevo evento
-#         new_event = {
-#             'event': event_name,
-#             'date': event_date,
-#             'time': event_time,
-#             'registered_at': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-#         }
-#         events.append(new_event)
-        
-#         # Guardar en el archivo JSON
-#         with open('events.json', 'w') as file:
-#             json.dump(events, file, indent=4)
-        
-#         return jsonify({'message': 'Evento registrado con éxito!'}), 200
-#     else:
-#         return jsonify({'error': 'Faltan datos'}), 400
-    
-# Ruta para registrar eventos
 @app.route('/api/register_event', methods=['POST'])
 def register_event():
     data = request.get_json()
     event_name = data.get('event')
-    event_date = data.get('date')
-    event_time = data.get('time')
+    event_rango_date = data.get('rango_date')
     event_state = data.get('state')  # Obtener el estado del evento
 
-    if event_name and event_date and event_time and event_state:
+    if event_name and event_rango_date and event_state:
         try:
             with open('events.json', 'r') as file:
                 events = json.load(file)
         except (FileNotFoundError, json.JSONDecodeError):
             events = []
-        
+
+        # Calcular el nuevo id basado en el id máximo existente en los eventos
+        if events:
+            max_id = max(event['id'] for event in events)
+        else:
+            max_id = 0
+
+        new_id = max_id + 1
+        fecha_reg = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         new_event = {
+            'id': new_id,  # Asignar el nuevo id
             'event': event_name,
-            'date': event_date,
-            'time': event_time,
+            'rango_date': event_rango_date,
             'state': event_state,  # Guardar el estado
-            'registered_at': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            'registered_at': fecha_reg
         }
         events.append(new_event)
-        
+
         with open('events.json', 'w') as file:
             json.dump(events, file, indent=4)
-        
-        return jsonify({'message': 'Evento registrado con éxito!'}), 200
+
+        return jsonify({'message': 'Evento registrado con éxito!', 'id': new_id,'registered_at': fecha_reg}), 200
     else:
         return jsonify({'error': 'Faltan datos'}), 400
+    
+@app.route('/api/update_event', methods=['PUT'])
+def update_event():
+    data = request.get_json()
+    event_id = data.get('id')  # Buscar por el id del evento
+    event_name = data.get('event')
+    event_rango_date = data.get('rango_date')
+    event_state = data.get('state')  # Obtener el estado del evento
 
+    if event_id and event_name and event_rango_date and event_state:
+        try:
+            with open('events.json', 'r') as file:
+                events = json.load(file)
+        except (FileNotFoundError, json.JSONDecodeError):
+            return jsonify({'error': 'No se encontraron eventos para actualizar.'}), 400
+
+        event_found = False
+        for event in events:
+            if event['id'] == event_id:
+                # Actualizar los detalles del evento encontrado
+                event['event'] = event_name
+                event['rango_date'] = event_rango_date
+                event['state'] = event_state
+                event['updated_at'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                event_found = True
+                break
+
+        if event_found:
+            with open('events.json', 'w') as file:
+                json.dump(events, file, indent=4)
+            return jsonify({'message': 'Evento actualizado con éxito!'}), 200
+        else:
+            return jsonify({'error': 'Evento no encontrado.'}), 404
+    else:
+        return jsonify({'error': 'Faltan datos'}), 400
+    
 
 
 # Ruta para obtener todos los eventos registrados
@@ -96,13 +103,16 @@ def get_event():
 
 
 
+
 @app.route('/api/delete_event', methods=['POST'])
 def delete_event():
     data = request.get_json()
-    event_name = data.get('event')
-    event_date = data.get('date')
-    event_time = data.get('time')
-    event_state = data.get('state')  # Obtener el estado del evento
+    
+    # Obtener el id del evento
+    event_id = data.get('id')
+
+    if not event_id:
+        return jsonify({'error': 'ID del evento es requerido'}), 400
 
     try:
         with open('events.json', 'r') as file:
@@ -110,17 +120,18 @@ def delete_event():
     except (FileNotFoundError, json.JSONDecodeError):
         return jsonify({'error': 'Archivo de eventos no encontrado'}), 404
 
-    events = [event for event in events if not (
-        event['event'] == event_name and
-        event['date'] == event_date and
-        event['time'] == event_time and
-        event['state'] == event_state
-    )]
+    # Filtrar los eventos, eliminando el que tiene el id proporcionado
+    updated_events = [event for event in events if event['id'] != event_id]
 
+    if len(updated_events) == len(events):
+        return jsonify({'error': 'Evento con el ID proporcionado no encontrado'}), 404
+
+    # Guardar la lista actualizada de eventos
     with open('events.json', 'w') as file:
-        json.dump(events, file, indent=4)
+        json.dump(updated_events, file, indent=4)
 
-    return jsonify({'message': 'Evento eliminado con éxito!'}), 200
+    return jsonify({'message': f'Evento con ID {event_id} eliminado con éxito!'}), 200
+
 
 
 

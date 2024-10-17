@@ -63,7 +63,7 @@ form button:hover {
 }
 
 /* Estilos para tablas (DataTables) */
-table {
+#eventTable {
     width: 100%;
     margin-top: 20px;
     border-collapse: collapse;
@@ -71,19 +71,19 @@ table {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-table th, table td {
+#eventTable th, #eventTable td {
     padding: 12px 15px;
     text-align: left;
     border-bottom: 1px solid #ddd;
 }
 
-table th {
+#eventTable th {
     background-color: #4CAF50;
     color: white;
     font-weight: bold;
 }
 
-table tbody tr:hover {
+#eventTable tbody tr:hover {
     background-color: #f1f1f1;
 }
 
@@ -119,7 +119,7 @@ table tbody tr:hover {
         width: 100%;
     }
 
-    table th, table td {
+    #eventTable th, #eventTable td {
         font-size: 14px;
     }
 }
@@ -136,7 +136,7 @@ input:focus, select:focus {
 
 
 
-/* Estilos generales para los botones */
+/*Estilos generales para los botones*/
 button {
     padding: 10px 15px;
     border: none;
